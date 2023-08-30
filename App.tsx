@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,6 +16,7 @@ import {
   useColorScheme,
   View,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 
 import {
@@ -25,6 +26,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -46,9 +48,36 @@ function App(): JSX.Element {
       setInput('');
     } else {
       setInput(input + value);
-      setResult(input+ value);
+      setResult(input + value);
     }
   };
+
+
+  const _handleBenchPress = () => {
+    const r = 500000; // Number of iterations
+
+    const stopwatch = new Date().getTime(); // start the stopwatch
+    let result = 0;
+    for (let i = 0; i < r; i++) {
+      result = Math.pow(
+        ((12345678 * 23456789 * 34567891 * 45678912 * 56789123) / 98765432),
+        r
+      );
+    }
+    const elapsedTime = new Date().getTime() - stopwatch; // stop the stopwatch
+
+    setResult(result.toString()); // update the result state variable
+
+    // Show a toast message with the time taken for the operation
+    Alert.alert(
+      'Benchmark Result',
+      `Time taken for the operation: ${elapsedTime} ms`,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+      { cancelable: false }
+    );
+  };
+
+
 
   return (
     <View style={styles.container}>
@@ -108,11 +137,17 @@ function App(): JSX.Element {
         <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={() => handleInput('C')}>
           <Text style={styles.buttonText}>C</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: 'red' }]}
+          onPress={_handleBenchPress}
+        >
+          <Text style={styles.buttonText}>Bench</Text>
+        </TouchableOpacity>
       </View>
     </View>
 
 
- 
+
   )
 
 
@@ -139,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     padding: 20,
     marginBottom: 20,
-    
+
   },
   input: {
     fontSize: 24,
